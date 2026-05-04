@@ -14,10 +14,17 @@ const logEvent = (message) => {
 const server = net
   .createServer((client) => {
     const clientId = `Client-${client.remotePort}`;
+    client.setEncoding("utf8");
 
     client.write("Welcome to the server");
 
     logEvent(`${clientId} connected`);
+
+    client.on("end", () => {
+      const disconnectMsg = `${clientId} disconnected`;
+      console.log(disconnectMsg);
+      logEvent(disconnectMsg);
+    });
   })
   .listen(3000, () => {
     console.log("listening port 3000");
